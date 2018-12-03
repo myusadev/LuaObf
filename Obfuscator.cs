@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Obf
+namespace StereoObfuscator
 {
     public class Obfuscator
     {
@@ -15,8 +15,7 @@ namespace Obf
         public Random random = new Random();
         public string GetRandomAlphaNumeric(int ammount)
         {
-            // Lua functions can't start with numbers & I'm too lazy to add a check.
-            var chars = "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var chars = "Il1Ill1IlllIll11Illl1IllllIlll1IllllIll111Illl111IlllIl1Ill1IlllIll11Illl1IllllIlll1IllllIll111Illl111IlllIl1Ill1IlllIll11Illl1IllllIlll1IllllIll111Illl111IlllIl1Ill1IlllIll11Illl1IllllIlll1IllllIll111Illl111Illl";
             return new string(chars.Select(c => chars[random.Next(chars.Length)]).Take(ammount).ToArray());
         }
 
@@ -41,12 +40,14 @@ namespace Obf
                         if (newName.IndexOf('1') != 0)
                         {
                             name = newName;
-                        } else
+                        }
+                        else
                         {
                             return getVarName();
                         }
                     }
-                } else
+                }
+                else
                 {
                     return getVarName();
                 }
@@ -84,6 +85,29 @@ namespace Obf
                         Regex rgx = new Regex(var.oldName);
                         returns = rgx.Replace(returns, var.newName);
                     }
+
+                    if (line.Contains("\"")) //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                    {
+                        string dumpedstr = null;
+                        MatchCollection allMatchResults = null;
+                        var noob = "\"";
+                        var regexObj = new Regex(noob + @"\w*" + noob);
+                        allMatchResults = regexObj.Matches(line);
+                        foreach(Match m in allMatchResults)
+                        {
+                           
+                            foreach(char ch in m.Value.Replace("\"", ""))
+                            {
+                                int x = ch;
+                                dumpedstr = dumpedstr + "\\" + x.ToString();
+                            }
+                            string notsocute = m.Value;
+                            Regex rgx = new Regex(notsocute);
+                            returns = rgx.Replace(returns, "\"" + dumpedstr + "\"");
+                            dumpedstr = null;
+                        }
+                    }
+
                     if (line.Contains("function"))
                     {
                         if (isVar == false)
