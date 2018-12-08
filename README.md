@@ -10,5 +10,8 @@ Uh, stuff:
 [1] Added string obfuscation (cough string.dump cough (cough char to int, int to string cough) ((cough buggy cough))
 
 
-Bugs:
-[0] It'll fuck more things up, that's why I've forked luaobf repo. (e.g: https://vgy.me/mt9W2d.png fml)
+So, about this bug, https://vgy.me/mt9W2d.png, It happens when a variable is named as a char or a common thing.
+e.g 
+local n --> local Illll1IIl1
+pri"n"t() --> priIllll1IIl1t()
+very sad, can we play despacito?
